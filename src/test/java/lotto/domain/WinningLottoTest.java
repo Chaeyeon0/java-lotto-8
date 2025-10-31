@@ -38,5 +38,30 @@ class WinningLottoTest {
     void 당첨_번호_정상_생성() {
         WinningLotto winningLotto = new WinningLotto(List.of(1, 2, 3, 4, 5, 6), 7);
         assertThat(winningLotto).isNotNull();
+        assertThat(winningLotto.match(new Lotto(List.of(1,2,3,4,5,6))).getMatchCount()).isEqualTo(6);
+    }
+
+    @DisplayName("로또와 당첨 번호를 비교하여 일치 개수를 반환한다.")
+    @Test
+    void 일치_개수_확인() {
+        WinningLotto winningLotto = new WinningLotto(List.of(1, 2, 3, 4, 5, 6), 7);
+        Lotto userLotto = new Lotto(List.of(1, 2, 3, 10, 11, 12));
+
+        WinningLotto.MatchResult result = winningLotto.match(userLotto);
+
+        assertThat(result.getMatchCount()).isEqualTo(3);
+        assertThat(result.isBonusMatch()).isFalse();
+    }
+
+    @DisplayName("보너스 번호가 일치하면 bonusMatch가 true를 반환한다.")
+    @Test
+    void 보너스_번호_일치() {
+        WinningLotto winningLotto = new WinningLotto(List.of(1, 2, 3, 4, 5, 6), 7);
+        Lotto userLotto = new Lotto(List.of(1, 2, 3, 4, 5, 7));
+
+        WinningLotto.MatchResult result = winningLotto.match(userLotto);
+
+        assertThat(result.getMatchCount()).isEqualTo(5);
+        assertThat(result.isBonusMatch()).isTrue();
     }
 }
