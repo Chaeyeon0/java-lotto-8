@@ -6,6 +6,7 @@ import java.util.Map;
 import lotto.domain.Lotto;
 import lotto.domain.Rank;
 import lotto.domain.WinningLotto;
+import lotto.domain.MatchResult;
 
 public class LottoCalculator {
 
@@ -16,7 +17,7 @@ public class LottoCalculator {
         }
 
         for (Lotto lotto : purchasedLottos) {
-            WinningLotto.MatchResult result = winningLotto.match(lotto);
+            MatchResult result = winningLotto.match(lotto);
             Rank rank = Rank.findByMatchCountAndBonus(result.getMatchCount(), result.isBonusMatch());
             rankCountMap.put(rank, rankCountMap.get(rank) + 1);
         }

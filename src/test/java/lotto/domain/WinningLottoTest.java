@@ -47,7 +47,7 @@ class WinningLottoTest {
         WinningLotto winningLotto = new WinningLotto(List.of(1, 2, 3, 4, 5, 6), 7);
         Lotto userLotto = new Lotto(List.of(1, 2, 3, 10, 11, 12));
 
-        WinningLotto.MatchResult result = winningLotto.match(userLotto);
+        MatchResult result = winningLotto.match(userLotto);
 
         assertThat(result.getMatchCount()).isEqualTo(3);
         assertThat(result.isBonusMatch()).isFalse();
@@ -59,7 +59,7 @@ class WinningLottoTest {
         WinningLotto winningLotto = new WinningLotto(List.of(1, 2, 3, 4, 5, 6), 7);
         Lotto userLotto = new Lotto(List.of(1, 2, 3, 4, 5, 7));
 
-        WinningLotto.MatchResult result = winningLotto.match(userLotto);
+        MatchResult result = winningLotto.match(userLotto);
 
         assertThat(result.getMatchCount()).isEqualTo(5);
         assertThat(result.isBonusMatch()).isTrue();
