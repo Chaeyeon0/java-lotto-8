@@ -28,6 +28,7 @@ java-lotto
 │   ├── Lotto.java                       # 로또 한 장을 나타내는 클래스
 │   ├── LottoMachine.java                # 로또 발행기
 │   ├── WinningLotto.java                # 당첨 번호 및 보너스 번호 관리
+│   ├── MatchResult.java                 # 로또와 당첨 번호를 비교한 결과 보관
 │   └──  Rank.java                        # 등수 및 상금 Enum
 │  
 ├── dto                                
