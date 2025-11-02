@@ -8,7 +8,7 @@ import lotto.domain.Rank;
 import lotto.domain.WinningLotto;
 import lotto.domain.MatchResult;
 
-public class LottoCalculator {
+public class LottoStatisticsCalculator {
 
     public Map<Rank, Integer> calculateRankCounts(List<Lotto> purchasedLottos, WinningLotto winningLotto) {
         Map<Rank, Integer> rankCountMap = new EnumMap<>(Rank.class);

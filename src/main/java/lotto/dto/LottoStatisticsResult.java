@@ -3,11 +3,11 @@ package lotto.dto;
 import java.util.Map;
 import lotto.domain.Rank;
 
-public class LottoResult {
+public class LottoStatisticsResult {
     private final Map<Rank, Integer> rankCountMap;
     private final double profitRate;
 
-    public LottoResult(Map<Rank, Integer> rankCountMap, double profitRate) {
+    public LottoStatisticsResult(Map<Rank, Integer> rankCountMap, double profitRate) {
         this.rankCountMap = Map.copyOf(rankCountMap);
         this.profitRate = profitRate;
     }

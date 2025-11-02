@@ -2,7 +2,7 @@ package lotto.controller;
 
 import java.util.List;
 import lotto.domain.Lotto;
-import lotto.dto.LottoResult;
+import lotto.dto.LottoStatisticsResult;
 import lotto.domain.WinningLotto;
 import lotto.service.LottoService;
 import lotto.view.InputView;
@@ -22,7 +22,7 @@ public class LottoController {
             int bonusNumber = InputView.inputBonusNumber();
             WinningLotto winningLotto = new WinningLotto(winningNumbers, bonusNumber);
 
-            LottoResult lottoResult = lottoService.calculateResult(purchased, winningLotto, amount);
+            LottoStatisticsResult lottoResult = lottoService.calculateResult(purchased, winningLotto, amount);
             OutputView.printStatistics(lottoResult.getRankCountMap());
             OutputView.printProfitRate(lottoResult.getProfitRate());
 
