@@ -15,26 +15,32 @@
 
 ```
 java-lotto
-├── Application.java                  
+├── Application.java                     
 │
-├── controller                        
-│   └── LottoController.java          # 입출력과 도메인 로직 연결
+├── controller                          
+│   └── LottoController.java             # 입출력과 서비스 로직 연결
 │
-├── domain                            
-│   ├── Lotto.java                    # 로또 한 장을 나타내는 클래스
-│   ├── LottoMachine.java             # 로또 발행기 (랜덤 번호 생성)
-│   ├── LottoResult.java              # 당첨 통계 및 수익률 계산
-│   ├── Rank.java                     # 등수 및 상금 Enum
-│   └── WinningLotto.java             # 당첨 번호와 보너스 번호 관리
+├── service                              # 핵심 비즈니스 처리 계층
+│   ├── LottoService.java                # 전체 로또 흐름 관리
+│   └── LottoCalculator.java             # 당첨 결과 및 수익률 계산 로직
 │
-├── util                            
-│   ├── InputParser.java              # 문자열 입력 파싱 및 변환
-│   ├── LottoConstants.java           # 상수 정의 (가격, 범위 등)
-│   └── LottoValidator.java           # 로또 번호 유효성 검증
+├── domain                               # 핵심 도메인 로직 (불변 규칙)
+│   ├── Lotto.java                       # 로또 한 장을 나타내는 클래스
+│   ├── LottoMachine.java                # 로또 발행기
+│   ├── WinningLotto.java                # 당첨 번호 및 보너스 번호 관리
+│   └──  Rank.java                        # 등수 및 상금 Enum
+│  
+├── dto                                
+│   └── LottoResult.java                 # 당첨 통계 및 수익률 결과
 │
-└── view                              
-    ├── InputView.java                # 사용자 입력 처리
-    └── OutputView.java               # 결과 및 메시지 출력
+├── util                                
+│   ├── InputParser.java                 # 문자열 입력 파싱 및 변환
+│   ├── LottoValidator.java              # 로또 번호 유효성 검증
+│   └── LottoConstants.java              # 상수 관리 (가격, 범위 등)
+│  
+└── view                                 # 입출력 담당
+    ├── InputView.java                   # 사용자 입력 처리
+    └── OutputView.java                  # 결과 및 메시지 출력
 
 test
 ├── java
@@ -155,8 +161,43 @@ test
 - 입력값 검증 로직은 별도 유틸 또는 Validator로 분리
 - 메서드는 15라인 이하로 작성
 - 들여쓰기는 2단계 이내로 제한
-- **`else`**, **`switch`**문 사용 금지 (조기 반환 return 사용)
-- 필요 시 **`List`**, **`Map`** 등을 활용하여 결과를 효율적으로 집계
+- else, switch문 사용 금지 (조기 반환 return 사용)
+- 필요 시 List, Map 등을 활용하여 결과를 효율적으로 집계
+
+---
+
+### 💡 초기 계획 변경사항 및 리팩토링
+
+초기에는 대부분의 비즈니스 로직이 `LottoController`와 `LottoResult` 내부에 집중되어 있다고 느껴, 각 계층의 역할을 명확하게 분리해보고 싶었다.
+
+1. Controller의 책임 분리
+
+**변경 전**
+
+- `LottoController`가 입력 → 로또 발행 → 결과 계산 → 출력까지 모든 과정을 직접 수행함
+- Controller가 비즈니스 로직과 UI 로직을 모두 다루어, 테스트 및 유지보수가 어려움
+
+**변경 후**
+
+- `LottoController`는 오직 “흐름 제어”만 담당하도록 단순화
+- 로또 구매 및 결과 계산 등의 핵심 비즈니스 로직은 `LottoService`로 이동
+- 예외 발생 시 동일 입력 단계를 재수행하는 흐름만 유지
+
+2. LottoResult의 역할 분리 (DTO + Calculator 구조로 개선)
+
+**변경 전**
+
+- `LottoResult`가 통계 계산, 상금 합산, 수익률 계산까지 모두 수행
+- 데이터 보관 객체(DTO)와 계산 로직(Service)가 혼재되어 응집도가 낮았음
+
+**변경 후**
+
+- `LottoResult`를 **순수 데이터 전달 객체(DTO)** 로 단순화
+- 통계 계산 및 수익률 로직은 **`LottoCalculator`** 클래스로 분리하여 `service` 패키지에 배치
+- `LottoCalculator`는 `Lotto`와 `WinningLotto` 간의 비교를 통해 당첨 통계를 계산하고,
+    
+    `LottoResult`를 생성하여 Controller로 전달함
+
 
 ---
 
