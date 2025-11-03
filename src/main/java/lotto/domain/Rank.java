@@ -28,10 +28,6 @@ public enum Rank {
         return prize;
     }
 
-    public boolean isBonusMatchRequired() {
-        return bonusMatchRequired;
-    }
-
     public static Rank findByMatchCountAndBonus(int matchCount, boolean bonusMatch) {
         if (matchCount == 5 && bonusMatch) {
             return SECOND;
@@ -43,9 +39,5 @@ public enum Rank {
                 .filter(rank -> rank.matchCount == matchCount)
                 .findFirst()
                 .orElse(MISS);
-    }
-
-    public boolean isWinning() {
-        return this != MISS;
     }
 }
